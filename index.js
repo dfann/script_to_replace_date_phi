@@ -2,9 +2,10 @@
  * A script which will replace the Dates from the patients.log file with
  * Anonymized dates
  */
+
+
+import {getUserOptions} from './utils/userInput.js'
 import AWS from "aws-sdk";
-import fs from "fs";
-const fsp = fs.promises;
 
 AWS.config.loadFromPath("./local-creds.json");
 const s3 = new AWS.S3();
@@ -14,17 +15,20 @@ const params = {
   Key: "log.log",
 };
 
+
+
 /**
  * Replaces the date phi for the patients.log file
  * Dates in Month/Day/Year format will be replaced to “X/X/YEAR"
  * For example “1/23/1981” would become “X/X/1981”
  */
 const replace_phi = async () => {
-  const fileBody = await getFileFromS3();
-  const anonymizedFileBody = regexReplaceDate(fileBody);
+  const userOptions = getUserOptions();
+  // const fileBody = await getFileFromS3();
+  // const anonymizedFileBody = regexReplaceDate(fileBody);
 
-  await writeFileToS3(anonymizedFileBody);
-  console.log("Data written successfully");
+  // await writeFileToS3(anonymizedFileBody);
+  // console.log("Data written successfully");
 };
 
 const regexReplaceDate = (fileBody) => {
@@ -66,3 +70,6 @@ const writeFileToS3 = async (data) => {
 };
 
 replace_phi();
+//util
+//user-input
+//s3
