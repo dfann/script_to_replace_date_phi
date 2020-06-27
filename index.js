@@ -19,14 +19,12 @@ const params = {
  * Dates in Month/Day/Year format will be replaced to “X/X/YEAR"
  * For example “1/23/1981” would become “X/X/1981”
  */
-const replace_phi = () => {
-  getFileFromS3((fileBody) => {
-    const anonymizedFileBody = regexReplaceDate(fileBody);
-    console.log(anonymizedFileBody)
-    // writeFileToS3(anonymizedFileBody, () => {
-    //   console.log("Data written successfully");
-    // });
-  });
+const replace_phi = async () => {
+  const fileBody = await getFileFromS3();
+  const anonymizedFileBody = regexReplaceDate(fileBody);
+
+  await writeFileToS3(anonymizedFileBody);
+  console.log("Data written successfully");
 };
 
 const regexReplaceDate = (fileBody) => {
@@ -43,15 +41,13 @@ const regexReplaceDate = (fileBody) => {
  * @param {*} callBack The callback which will be called on success with the fileBody of the patients.log file
  * as a string
  */
-const getFileFromS3 = (callBack) => {
-  s3.getObject(params, (err, data) => {
-    if (err) {
-      console.log(err, err.stack);
-    } else {
-      callBack(data.Body.toString());
-      return data.Body.toString();
-    }
-  });
+const getFileFromS3 = async (callBack) => {
+  try {
+    const s3Data = await s3.getObject(params).promise();
+    return s3Data.Body.toString();
+  } catch (err) {
+    console.log(err, err.stack);
+  }
 };
 
 /**
@@ -59,15 +55,14 @@ const getFileFromS3 = (callBack) => {
  * @param {*} data The string representation of the file to be written
  * @param {*} callBack The callback which will be called on success with the data return from S3
  */
-const writeFileToS3 = (data, callBack) => {
+const writeFileToS3 = async (data) => {
   params.Body = data;
-  s3.putObject(params, (err, data) => {
-    if (err) {
-      console.log(err, err.stack);
-    } else {
-      callBack(data);
-    }
-  });
+  try {
+    const s3Data = await s3.putObject(params).promise();
+    return s3Data;
+  } catch (err) {
+    console.log(err, err.stack);
+  }
 };
 
 replace_phi();
