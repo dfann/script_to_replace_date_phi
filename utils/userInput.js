@@ -1,4 +1,6 @@
+import util from "util";
 import prompt from "prompt";
+const promptGet = util.promisify(prompt.get);
 
 const _isValidRegex = (regexToTest) => {
   try {
@@ -59,10 +61,11 @@ const PROMPT_SCHEMA = {
   },
 };
 
-const getUserOptions = () => {
-  prompt.get(PROMPT_SCHEMA, function (err, result) {
-    console.log(result.username);
-  });
+const getUserOptions = async () => {
+  try {
+    const result = await promptGet(PROMPT_SCHEMA);
+    console.log(result);
+  } catch (err) {}
 };
 
 export { getUserOptions };
