@@ -6,12 +6,12 @@ import AWS from "aws-sdk";
 import fs from "fs";
 const fsp = fs.promises;
 
-AWS.config.loadFromPath("./creds.json");
+AWS.config.loadFromPath("./local-creds.json");
 const s3 = new AWS.S3();
 
 const params = {
-  Bucket: "stellar.health.test.david.fann",
-  Key: "patients.log",
+  Bucket: "stellar-health",
+  Key: "log.log",
 };
 
 /**
@@ -22,10 +22,10 @@ const params = {
 const replace_phi = () => {
   getFileFromS3((fileBody) => {
     const anonymizedFileBody = regexReplaceDate(fileBody);
-
-    writeFileToS3(anonymizedFileBody, () => {
-      console.log("Data written successfully");
-    });
+    console.log(anonymizedFileBody)
+    // writeFileToS3(anonymizedFileBody, () => {
+    //   console.log("Data written successfully");
+    // });
   });
 };
 
