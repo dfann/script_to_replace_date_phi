@@ -9,11 +9,7 @@ import { mockResponse, mockRequest } from "../test_helpers/mock-req-res.js";
 import fs from "fs";
 const fsp = fs.promises;
 
-
-
 describe("getUserOptions", () => {
-
-
   it("prompt the user for options", async () => {
     const category = JSON.parse(JSON.stringify(testCategory));
     delete category.title;

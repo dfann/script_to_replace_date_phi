@@ -3,8 +3,7 @@
  * Anonymized dates
  */
 
-
-import {getUserOptions} from './utils/userInput.js'
+import { getUserOptions } from "./utils/userInput.js";
 import AWS from "aws-sdk";
 
 AWS.config.loadFromPath("./local-creds.json");
@@ -14,8 +13,6 @@ const params = {
   Bucket: "stellar-health",
   Key: "log.log",
 };
-
-
 
 /**
  * Replaces the date phi for the patients.log file
