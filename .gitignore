@@ -4,3 +4,4 @@ node_modules/
 .idea
 .env
 local-creds.json
+userOptions.json

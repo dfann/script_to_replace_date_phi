@@ -3,7 +3,7 @@
  * Anonymized dates
  */
 
-import { getUserOptions } from "./utils/userInput.js";
+import { getUserOptionsPrompt, getUserOptionsFile } from "./utils/userInput.js";
 import AWS from "aws-sdk";
 
 AWS.config.loadFromPath("./local-creds.json");
@@ -20,7 +20,16 @@ const params = {
  * For example “1/23/1981” would become “X/X/1981”
  */
 const replace_phi = async () => {
-  const userOptions = getUserOptions();
+  const filePath = process.argv[2];
+  let userOptions;
+  if (filePath) {
+    userOptions = await getUserOptionsFile(filePath);
+  } else {
+    userOptions = await getUserOptionsPrompt();
+  }
+
+  console.log(userOptions);
+
   // const fileBody = await getFileFromS3();
   // const anonymizedFileBody = regexReplaceDate(fileBody);
 

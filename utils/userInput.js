@@ -1,6 +1,8 @@
 import util from "util";
 import prompt from "prompt";
 const promptGet = util.promisify(prompt.get);
+import fs from "fs";
+const fsp = fs.promises;
 
 const _isValidRegex = (regexToTest) => {
   try {
@@ -67,11 +69,18 @@ const PROMPT_SCHEMA = {
   },
 };
 
-const getUserOptions = async () => {
+const getUserOptionsPrompt = async () => {
   try {
     const result = await promptGet(PROMPT_SCHEMA);
     console.log(result);
   } catch (err) {}
 };
 
-export { getUserOptions };
+const getUserOptionsFile = async (filePath) => {
+  try {
+    const userOptionsFile = await fsp.readFile(filePath);
+    return JSON.parse(userOptionsFile);
+  } catch (err) {}
+};
+
+export { getUserOptionsPrompt, getUserOptionsFile };
