@@ -45,14 +45,20 @@ const PROMPT_SCHEMA = {
       replace: "*",
     },
     patternToReplace: {
-      description: "Enter Regex Pattern To Replace",
-      message: "Regex Pattern To Replace must be a valid Regex",
+      description:
+        "Enter Regex Pattern To Replace. Type CUSTOM to enter your own Regex",
+      message: "Regex Pattern To Replace must be DOB, SSN, or CUSTOM",
       type: "string",
+      pattern: /DOB|SSN|CUSTOM/i,
       required: true,
       conform: _isValidRegex,
     },
-    patternToAdd: {
-      description: "Enter Regex Pattern To Add",
+    customPattern: {
+      description: "Enter Custom Regex Pattern",
+      ask: () => {
+        const patternToReplace = prompt.history("patternToReplace").value;
+        return patternToReplace.toUpperCase() === "CUSTOM";
+      },
       message: "Regex Pattern To Add must be a valid Regex",
       type: "string",
       required: true,
