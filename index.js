@@ -4,11 +4,7 @@
  */
 import { getUserOptionsPrompt, getUserOptionsFile } from "./utils/userInput.js";
 import { getFileFromS3, writeFileToS3 } from "./utils/s3.js";
-import {
-  regexReplaceDate,
-  regexReplaceCustom,
-  regexReplaceSSN,
-} from "./utils/dataReplacement.js";
+import { replaceData } from "./utils/dataReplacement.js";
 
 /**
  * Replaces the date phi for the patients.log file
@@ -25,8 +21,7 @@ const replacePHI = async () => {
   }
 
   const fileBody = await getFileFromS3(userOptions);
-
-  const anonymizedFileBody = regexReplaceDate(fileBody);
+  const anonymizedFileBody = replaceData(userOptions, fileBody);
 
   await writeFileToS3(userOptions, anonymizedFileBody);
   console.log("Data written successfully");
